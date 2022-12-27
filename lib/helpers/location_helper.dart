@@ -1,4 +1,4 @@
-const GOOGLE_API_KEY = 'AIzaSyBViJq84-bzhQmJRqvpv3iLq53Ne-CoiHY';
+import 'location_api_key.dart';
 
 class LocationHelper {
   static String GenerateLocationImage(
