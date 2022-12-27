@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:great_places/providers/great_places.dart';
 import 'package:great_places/widgets/image_input.dart';
+import 'dart:io';
+
+import 'package:provider/provider.dart';
 
 class AddPlaceScreen extends StatefulWidget {
   const AddPlaceScreen({super.key});
@@ -11,6 +15,20 @@ class AddPlaceScreen extends StatefulWidget {
 
 class _AddPlaceScreenState extends State<AddPlaceScreen> {
   final TextEditingController _textEditingController = TextEditingController();
+  File? _pickedImage;
+
+  void selectImage(File pickedImage) {
+    _pickedImage = pickedImage;
+  }
+
+  void _savePlace(BuildContext context) {
+    if (_textEditingController.text.isEmpty || _pickedImage == null) {
+      return;
+    }
+    Provider.of<GreatPlaces>(context, listen: false)
+        .addPlace(_textEditingController.text, _pickedImage!);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -31,7 +49,7 @@ class _AddPlaceScreenState extends State<AddPlaceScreen> {
                       controller: _textEditingController,
                     ),
                     SizedBox(height: 10),
-                    ImageInput()
+                    ImageInput(imageCallback: selectImage)
                   ],
                 ),
               ),
@@ -40,7 +58,10 @@ class _AddPlaceScreenState extends State<AddPlaceScreen> {
           ElevatedButton.icon(
             icon: Icon(Icons.add),
             label: Text('Submit'),
-            onPressed: () {},
+            onPressed: () {
+              _savePlace(context);
+              Navigator.of(context).pop();
+            },
             style: ButtonStyle(
               elevation: MaterialStateProperty.all(0),
               tapTargetSize: MaterialTapTargetSize.shrinkWrap,
