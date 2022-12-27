@@ -6,6 +6,9 @@ class PlaceLocation {
   final String address;
   PlaceLocation(
       {required this.latitude, required this.longitude, this.address = ''});
+  Map<String, Object> toMap() {
+    return {'latitude': latitude, 'longitude': longitude, 'address': address};
+  }
 }
 
 class Place {
@@ -18,4 +21,13 @@ class Place {
       required this.title,
       required this.location,
       required this.image});
+
+  Map<String, Object> toMap() {
+    return {
+      'id': id,
+      'title': title,
+      'location': location.toMap(),
+      'image': image.path
+    };
+  }
 }
