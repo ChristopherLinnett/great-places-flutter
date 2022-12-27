@@ -34,6 +34,7 @@ migrate_working_dir/
 
 #API key
 /lib/helpers/location_api_key.dart
+/android/app/src/main/
 
 # Symbolication related
 app.*.symbols
