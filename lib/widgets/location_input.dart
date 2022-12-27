@@ -1,5 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:great_places/helpers/location_helper.dart';
+import 'package:location/location.dart';
 
 class LocationInput extends StatefulWidget {
   const LocationInput({super.key});
@@ -10,6 +12,16 @@ class LocationInput extends StatefulWidget {
 
 class _LocationInputState extends State<LocationInput> {
   String? _imagePreviewUrl;
+
+  Future<void> _getCurrentLocation() async {
+    final locationData = await Location().getLocation();
+    final staticMapImageUrl = LocationHelper.GenerateLocationImage(
+        latitude: locationData.latitude ?? 0,
+        longitude: locationData.longitude ?? 0);
+    setState(() {
+      _imagePreviewUrl = staticMapImageUrl;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +47,7 @@ class _LocationInputState extends State<LocationInput> {
               icon: Icon(Icons.location_on),
               label: Text('Current Location',
                   style: Theme.of(context).textTheme.button),
-              onPressed: () {},
+              onPressed: _getCurrentLocation,
             ),
             TextButton.icon(
               icon: Icon(Icons.map),
