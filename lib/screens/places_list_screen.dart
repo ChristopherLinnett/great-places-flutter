@@ -10,37 +10,44 @@ class PlacesListScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Text('Your Places'),
-          actions: [
-            IconButton(
-              icon: Icon(Icons.add),
-              onPressed: () {
-                Navigator.of(context).pushNamed(AddPlaceScreen.routename);
-              },
-            )
-          ],
-        ),
-        body: Center(
-          child: Consumer<GreatPlaces>(
-              builder: ((ctx, greatPlaces, child) => greatPlaces.items.isEmpty
-                  ? child!
-                  : ListView.builder(
-                      itemCount: greatPlaces.items.length,
-                      itemBuilder: (context, index) => ListTile(
-                        leading: CircleAvatar(
-                          backgroundImage:
-                              FileImage(greatPlaces.items[index].image),
+      appBar: AppBar(
+        title: Text('Your Places'),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.add),
+            onPressed: () {
+              Navigator.of(context).pushNamed(AddPlaceScreen.routename);
+            },
+          )
+        ],
+      ),
+      body: FutureBuilder(
+        future: Provider.of<GreatPlaces>(context, listen: false)
+            .fetchAndSetPlaces(),
+        builder: ((context, snapshot) => snapshot.connectionState ==
+                ConnectionState.waiting
+            ? Center(child: CircularProgressIndicator.adaptive())
+            : Consumer<GreatPlaces>(
+                builder: ((ctx, greatPlaces, child) => greatPlaces.items.isEmpty
+                    ? child!
+                    : ListView.builder(
+                        itemCount: greatPlaces.items.length,
+                        itemBuilder: (context, index) => ListTile(
+                          leading: CircleAvatar(
+                            backgroundImage:
+                                FileImage(greatPlaces.items[index].image),
+                          ),
+                          title: Text(greatPlaces.items[index].title),
+                          onTap: () {
+                            //..go to detail page
+                          },
                         ),
-                        title: Text(greatPlaces.items[index].title),
-                        onTap: () {
-                          //..go to detail page
-                        },
-                      ),
-                    )),
-              child: Center(
-                child: Text('No Places Yet, Start Adding'),
+                      )),
+                child: Center(
+                  child: Text('No Places Yet, Start Adding'),
+                ),
               )),
-        ));
+      ),
+    );
   }
 }

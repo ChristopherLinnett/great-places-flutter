@@ -22,11 +22,24 @@ class Place {
       required this.location,
       required this.image});
 
+  static Place decode({required Map<String, dynamic> mappedPlace}) {
+    return Place(
+        id: mappedPlace['id'],
+        title: mappedPlace['title'],
+        location: PlaceLocation(
+            latitude: mappedPlace['latitude'],
+            longitude: mappedPlace['longitude'],
+            address: mappedPlace['address']),
+        image: File(mappedPlace['image']));
+  }
+
   Map<String, Object> toMap() {
     return {
       'id': id,
       'title': title,
-      'location': location.toMap(),
+      'latitude': location.latitude,
+      'longitude': location.longitude,
+      'address': location.address,
       'image': image.path
     };
   }
